@@ -1,0 +1,150 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\CLSID\{C4C4932A-BD95-40B1-9FE7-7EC0CDEA12BE}]
+@="WinScp adapter"
+
+[HKEY_CLASSES_ROOT\CLSID\{C4C4932A-BD95-40B1-9FE7-7EC0CDEA12BE}\BizTalk]
+@="BizTalk"
+'Type of the transport adapter
+"TransportType"="WinScp"
+
+'Constraints define the capabilities of the adapter: e.g send, receive, request-response, etc
+"Constraints"=dword:3C0B
+
+'============= Registration for receive side of adapter ==============
+'Adapter framwork property page for receive handler configuration
+"InboundProtocol_PageProv"="{2DE93EE6-CB01-4007-93E9-C3D71689A281}"
+
+'Adapter framework property page for receive location configuration
+"ReceiveLocation_PageProv"="{2DE93EE6-CB01-4007-93E9-C3D71689A280}"
+
+'Class ID of the class that implements receiving part of adapter
+"InboundEngineCLSID"="{3CD91E6D-DDF6-4ED8-B48E-735086468564}"
+
+'Type name of the class that implements receiving part of the adapter
+"InboundTypeName"="BizTalk.Adapter.WinScp.Runtime.WinScpReceiver"
+
+'Path to the assembly that implements receiving part of the adapter
+"InboundAssemblyPath"="C:\\Program Files (x86)\\Common Files\\Microsoft BizTalk\\BizTalk.Adapter.WinScp\\BizTalk.Adapter.WinScp.Runtime.dll"
+
+'SSO registration of the adapter framework property page for receive handler
+"ReceiveHandlerPropertiesXML"="<CustomProps><AdapterConfig vt=\"8\"/></CustomProps>"
+
+'SSO registration of the adapter framework property page for receive location
+"ReceiveLocationPropertiesXML"="<CustomProps><AdapterConfig vt=\"8\"/></CustomProps>"
+'============= End of registration for receive side of adapter ==============
+
+'============= Registration for send side of adapter ==============
+'Adapter framwork property page for send handler configuration
+"OutboundProtocol_PageProv"="{2DE93EE6-CB01-4007-93E9-C3D71689A283}"
+
+'Adapter framework property page for send location configuration
+"TransmitLocation_PageProv"="{2DE93EE6-CB01-4007-93E9-C3D71689A282}"
+
+'Class ID of the class that implements send part of adapter
+"OutboundEngineCLSID"="{BA2D86DF-D4E1-442A-9809-4DDF9CC05CB7}"
+
+'Type name of the class that implements send part of the adapter
+"OutboundTypeName"="BizTalk.Adapter.WinScp.Runtime.WinScpTransmitter"
+
+'Path to the assembly that implements sending part of the adapter
+"OutboundAssemblyPath"="C:\\Program Files (x86)\\Common Files\\Microsoft BizTalk\\BizTalk.Adapter.WinScp\\BizTalk.Adapter.WinScp.Runtime.dll"
+
+'URL prefixes used for dynamic port transport resolution
+"AliasesXML"="<AdapterAliasList><AdapterAlias>winscp://</AdapterAlias></AdapterAliasList>"
+
+'SSO registration of the adapter framework property page for send handler
+"SendHandlerPropertiesXML"="<CustomProps><AdapterConfig vt=\"8\"/></CustomProps>"
+
+'SSO registration of the adapter framework property page for send location
+"SendLocationPropertiesXML"="<CustomProps><AdapterConfig vt=\"8\"/></CustomProps>"
+'============= End of registration for send side of adapter ==============
+
+'Namespace of the adapter properties. The properties will be stored on message context under this namespace
+"PropertyNameSpace"="http://BizTalk/adapters/2022/winscp-properties"
+
+'Type name of the class that provides UI for adapter property pages
+"AdapterMgmtTypeName"="BizTalk.Adapter.WinScp.Admin.WinScpAdapterManagement"
+
+'Path to the assembly that implments UI for adapter property pages
+"AdapterMgmtAssemblyPath"="C:\\Program Files (x86)\\Common Files\\Microsoft BizTalk\\BizTalk.Adapter.WinScp\\BizTalk.Adapter.WinScp.Admin.dll"
+
+
+[HKEY_CLASSES_ROOT\CLSID\{C4C4932A-BD95-40B1-9FE7-7EC0CDEA12BE}\Implemented Categories]
+
+[HKEY_CLASSES_ROOT\CLSID\{C4C4932A-BD95-40B1-9FE7-7EC0CDEA12BE}\Implemented Categories\{7F46FC3E-3C2C-405B-A47F-8D17942BA8F9}]
+
+
+[HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{C4C4932A-BD95-40B1-9FE7-7EC0CDEA12BE}]
+@="WinScp adapter"
+
+[HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{C4C4932A-BD95-40B1-9FE7-7EC0CDEA12BE}\BizTalk]
+@="BizTalk"
+'Type of the transport adapter
+"TransportType"="WinScp"
+
+'Constraints define the capabilities of the adapter: e.g send, receive, request-response, etc
+"Constraints"=dword:3C0B
+
+'============= Registration for receive side of adapter ==============
+'Adapter framwork property page for receive handler configuration
+"InboundProtocol_PageProv"="{2DE93EE6-CB01-4007-93E9-C3D71689A281}"
+
+'Adapter framework property page for receive location configuration
+"ReceiveLocation_PageProv"="{2DE93EE6-CB01-4007-93E9-C3D71689A280}"
+
+'Class ID of the class that implements receiving part of adapter
+"InboundEngineCLSID"="{3CD91E6D-DDF6-4ED8-B48E-735086468564}"
+
+'Type name of the class that implements receiving part of the adapter
+"InboundTypeName"="BizTalk.Adapter.WinScp.Runtime.WinScpReceiver"
+
+'Path to the assembly that implements receiving part of the adapter
+"InboundAssemblyPath"="C:\\Program Files (x86)\\Common Files\\Microsoft BizTalk\\BizTalk.Adapter.WinScp\\BizTalk.Adapter.WinScp.Runtime.dll"
+
+'SSO registration of the adapter framework property page for receive handler
+"ReceiveHandlerPropertiesXML"="<CustomProps><AdapterConfig vt=\"8\"/></CustomProps>"
+
+'SSO registration of the adapter framework property page for receive location
+"ReceiveLocationPropertiesXML"="<CustomProps><AdapterConfig vt=\"8\"/></CustomProps>"
+'============= End of registration for receive side of adapter ==============
+
+'============= Registration for send side of adapter ==============
+'Adapter framwork property page for send handler configuration
+"OutboundProtocol_PageProv"="{2DE93EE6-CB01-4007-93E9-C3D71689A283}"
+
+'Adapter framework property page for send location configuration
+"TransmitLocation_PageProv"="{2DE93EE6-CB01-4007-93E9-C3D71689A282}"
+
+'Class ID of the class that implements send part of adapter
+"OutboundEngineCLSID"="{BA2D86DF-D4E1-442A-9809-4DDF9CC05CB7}"
+
+'Type name of the class that implements send part of the adapter
+"OutboundTypeName"="BizTalk.Adapter.WinScp.Runtime.WinScpTransmitter"
+
+'Path to the assembly that implements sending part of the adapter
+"OutboundAssemblyPath"="C:\\Program Files (x86)\\Common Files\\Microsoft BizTalk\\BizTalk.Adapter.WinScp\\BizTalk.Adapter.WinScp.Runtime.dll"
+
+'URL prefixes used for dynamic port transport resolution
+"AliasesXML"="<AdapterAliasList><AdapterAlias>winscp://</AdapterAlias></AdapterAliasList>"
+
+'SSO registration of the adapter framework property page for send handler
+"SendHandlerPropertiesXML"="<CustomProps><AdapterConfig vt=\"8\"/></CustomProps>"
+
+'SSO registration of the adapter framework property page for send location
+"SendLocationPropertiesXML"="<CustomProps><AdapterConfig vt=\"8\"/></CustomProps>"
+'============= End of registration for send side of adapter ==============
+
+'Namespace of the adapter properties. The properties will be stored on message context under this namespace
+"PropertyNameSpace"="http://BizTalk/adapters/2022/winscp-properties"
+
+'Type name of the class that provides UI for adapter property pages
+"AdapterMgmtTypeName"="BizTalk.Adapter.WinScp.Admin.WinScpAdapterManagement"
+
+'Path to the assembly that implments UI for adapter property pages
+"AdapterMgmtAssemblyPath"="C:\\Program Files (x86)\\Common Files\\Microsoft BizTalk\\BizTalk.Adapter.WinScp\\BizTalk.Adapter.WinScp.Admin.dll"
+
+
+[HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{C4C4932A-BD95-40B1-9FE7-7EC0CDEA12BE}\Implemented Categories]
+
+[HKEY_CLASSES_ROOT\Wow6432Node\CLSID\{C4C4932A-BD95-40B1-9FE7-7EC0CDEA12BE}\Implemented Categories\{7F46FC3E-3C2C-405B-A47F-8D17942BA8F9}]
