@@ -138,17 +138,11 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
         private void DonwloadAndSubmit(RemoteFileInfo file,string localFilePath)
         {
-            TransferOptions transferOptions = new TransferOptions
-            {
-                TransferMode = Properties.TransferMode,
-                PreserveTimestamp = false
-            };
-        
 
 
             try
             {
-                connection.OpenSession().GetFiles(file.FullName, localFilePath, options: transferOptions).Check();
+                connection.OpenSession().GetFiles(file.FullName, localFilePath, options: connection.GetTransferOptions()).Check();
 
 
                 IBaseMessage msg = CreateMessage(localFilePath);
@@ -413,8 +407,12 @@ namespace BizTalk.Adapter.WinScp.Runtime
             this.controlledTermination = control;
             this.messageFactory = this.transportProxy.GetMessageFactory();
 
+            var handler = ConfigProperties.ExtractConfigDom(handlerPropertyBag);
+
             Properties = new WinScpReceiverProperties();
+            Properties.LoadHandler(handler);
             Properties.LoadConfig(ConfigProperties.ExtractConfigDom(config));
+
 
             connection = new WinScpConnection(Properties);
 

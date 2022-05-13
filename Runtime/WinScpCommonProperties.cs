@@ -13,6 +13,15 @@ namespace BizTalk.Adapter.WinScp.Runtime
 {
     public abstract class WinScpCommonProperties
     {
+      
+        public enum ProxyMethod
+        {
+            None = 0,
+            SOCKS4 = 1,
+            SOCKS5 = 2,
+            HTTP = 3,
+            Telnet = 4
+        }
         //WebDAV and S3, not implemented/tested
 
         //Session => https://winscp.net/eng/docs/library_session#properties
@@ -104,7 +113,16 @@ namespace BizTalk.Adapter.WinScp.Runtime
         public string DebugLogPath { get; set; }
 
         public int DebugLogLevel { get; set; }
-        
+
+        public ProxyMethod FirewallType { get; set; } = ProxyMethod.None;
+
+        public string FirewallAddress { get; set; }
+
+        public string FirewallUserName { get; set; }
+        public string FirewallPassword { get; set; }
+
+        public int FirewallPort { get; set; }
+
 
         public WinScpCommonProperties()
         {
@@ -116,10 +134,20 @@ namespace BizTalk.Adapter.WinScp.Runtime
         /// </summary>
         public void LoadHandler(XmlDocument config)
         {
-            //Lägg till FW/proxy senare
-            // this.spoolingFolder = ConfigProperties.IfExistsExtract(configDOM, "/Config/'''''''", this.spoolingFolder);
-            // this.ProcessFtpConfigurationProperties(configDOM);
-            // this.ProcessFirewallProperties(configDOM);
+            //https://winscp.net/eng/docs/rawsettings
+
+            int firewallType = ConfigProperties.ExtractInt(config, "/Config/firewallType");
+
+            if(firewallType > 0)
+            {
+                FirewallType = (ProxyMethod)firewallType;
+                FirewallAddress = ConfigProperties.IfExistsExtract(config, "/Config/firewallAddress", FirewallAddress);
+                FirewallUserName = ConfigProperties.IfExistsExtract(config, "/Config/firewallUserName", FirewallUserName);
+                FirewallPassword = ConfigProperties.IfExistsExtract(config, "/Config/firewallPassword", FirewallPassword);
+                FirewallPort = ConfigProperties.ExtractInt(config, "/Config/firewallPort");
+         
+            }
+
         }
 
         /// <summary>
@@ -163,10 +191,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
             this.DebugLogLevel = ConfigProperties.IfExistsExtractInt(configDOM, "/Config/debugLogLevel", 0);
             this.ErrorThreshold = ConfigProperties.IfExistsExtractUInt(configDOM, "/Config/errorThreshold", 10);
 
-            //PUT/GET
-            //this.Before = ConfigProperties.IfExistsExtract(configDOM, "/Config/before", String.Empty);
-            //this.After = ConfigProperties.IfExistsExtract(configDOM, "/Config/after", String.Empty);
-            /*
+            
+            /* TO-DO
             string affiliateApplication = ConfigProperties.IfExistsExtract(configDOM, "/Config/ssoAffiliateApplication", (string)null);
             if (!string.IsNullOrEmpty(affiliateApplication))
             {

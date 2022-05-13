@@ -22,7 +22,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
         private WinScpCommonProperties Properties { get; set; }
         private Session session = null;
         private SessionOptions options = null;
-
+        private TransferOptions transferOptions = null;
         private bool Busy { get; set; }
         private DateTime LastUsed { get; set; }
 
@@ -121,7 +121,27 @@ namespace BizTalk.Adapter.WinScp.Runtime
         }
 
 
+        public TransferOptions GetTransferOptions()
+        {
+            transferOptions = new TransferOptions
+            {
+                TransferMode = Properties.TransferMode,
+                PreserveTimestamp = false
+            };
 
+            if (Properties.FirewallType != WinScpCommonProperties.ProxyMethod.None)
+            {
+                transferOptions.AddRawSettings("ProxyHost", Properties.FirewallAddress);
+                transferOptions.AddRawSettings("ProxyMethod", ((int)Properties.FirewallType).ToString());
+                transferOptions.AddRawSettings("ProxyPort", Properties.FirewallPort.ToString());
+                transferOptions.AddRawSettings("ProxyUsername", Properties.FirewallUserName ?? string.Empty);
+                transferOptions.AddRawSettings("ProxyPassword", Properties.FirewallPassword ?? string.Empty);
+            }
+
+            //.AddRawSettings("KEX", ..KexPolicy);
+
+            return transferOptions;
+        }
 
         private SessionOptions GetSessionOptions()
         {
@@ -134,26 +154,6 @@ namespace BizTalk.Adapter.WinScp.Runtime
             options.UserName = Properties.UserName.HasValue() ? Properties.UserName : options.UserName;
             options.Password = Properties.Password.HasValue() ? Properties.Password : options.Password;
             options.FtpMode = Properties.FtpMode;
-
-
-            //options.AddRawSettings("ProxyMethod", "3");
-            //options.AddRawSettings("ProxyHost", "********");
-            //options.AddRawSettings("ProxyPort", "8082");
-
-            //options.AddRawSettings("KEX", ..KexPolicy);
-
-            /*
-             *  private const string DefaultEncryptionCipher = "aes,3des,blowfish,WARN,arcfour,des";
-                private const string Cipher = "Cipher";
-
-               AddEncryptionCipher =>   if (encryptionCipher.Equals((object) EncryptionCipher.Auto))
-                .AddRawSettings("Cipher", "aes,3des,blowfish,WARN,arcfour,des");
-            else if (encryptionCipher.Equals((object) EncryptionCipher.TripleDES))
-                .AddRawSettings("Cipher", "3des,WARN");
-            else
-                .AddRawSettings("Cipher", encryptionCipher.ToString().ToLower() + ",WARN"); 
-
-             */
 
             if (options.Protocol == Protocol.Sftp)
             {

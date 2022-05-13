@@ -27,7 +27,6 @@ namespace BizTalk.Adapter.WinScp.Runtime
       this.Properties = new WinScpTransmitterProperties(this.OutboundLocation);
       if (handlerConfigDOM != null)
       {
-        
         this.Properties.LoadConfig(handlerConfigDOM);
       }
       string xml = (string) context.Read("AdapterConfig", propNamespace);

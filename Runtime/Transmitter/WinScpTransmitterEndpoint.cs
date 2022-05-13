@@ -12,6 +12,7 @@ using System.Threading;
 using WinSCP;
 using BizTalk.Adapter.WinScp.VSExtensions;
 using System.Diagnostics;
+using System.Xml;
 
 namespace BizTalk.Adapter.WinScp.Runtime
 {
@@ -47,9 +48,26 @@ namespace BizTalk.Adapter.WinScp.Runtime
           string propertyNamespace)
         {
 
+            
+
             this.PropertyNamespace = propertyNamespace;
             this.Properties = ((WinScpEndpointParameters)endpointParameters).Properties;
 
+            try
+            {
+                if(handlerPropertyBag != null)
+                {
+                    XmlDocument doc = ConfigProperties.ExtractConfigDom(handlerPropertyBag);
+                    this.Properties.LoadHandler(doc);
+                }
+ 
+            }
+            catch (NoAdapterConfig)
+            {
+
+            }
+
+        
             connection = new WinScpConnection(this.Properties);
 
         }
@@ -68,15 +86,6 @@ namespace BizTalk.Adapter.WinScp.Runtime
                 try
                 {
 
-
-                    TransferOptions transferOptions = new TransferOptions
-                    {
-                        TransferMode = Properties.TransferMode,
-                        PreserveTimestamp = false
-                    };
-
-                    //transferOptions.AddRawSettings
-
                     string temporaryFilename = Path.Combine(temporaryPath, Guid.NewGuid().ToString());
 
 
@@ -91,7 +100,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
                         remoteFilepath = FtpUtil.UpdateExtension(remoteFilepath, Properties.TemporaryFileExtension);
                     }
 
-                    connection.OpenSession().PutFiles(temporaryFilename, remoteFilepath, true, transferOptions).Check();
+                    connection.OpenSession().PutFiles(temporaryFilename, remoteFilepath, true, connection.GetTransferOptions()).Check();
 
 
                     if (Properties.TemporaryFileExtension.HasValue())
