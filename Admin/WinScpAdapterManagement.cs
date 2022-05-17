@@ -93,8 +93,8 @@ namespace BizTalk.Adapter.WinScp.Admin
 
             XmlNode temporaryFolder = configDOM.SelectSingleNode("Config/temporaryFolder");
 
-            if (temporaryFolder.IsEmpty())
-                throw new ArgumentNullException("ValidateReceiveLocation", "Temporary folder setting is mandatory");
+            //if (temporaryFolder.IsEmpty())
+            //    throw new ArgumentNullException("ValidateReceiveLocation", "Temporary folder setting is mandatory");
 
             XmlNode url = configDOM.SelectSingleNode("Config/url");
 
