@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,9 @@ namespace BizTalk.Adapter.WinScp.Runtime
         public bool DeleteAfterDownload { get; set; } = true;
         public override void LoadConfig(XmlDocument configDOM)
         {
+           
             base.LoadConfig(configDOM);
+           
 
             this.FileMask = ConfigProperties.IfExistsExtract(configDOM, "/Config/fileMask", "*.*");
 

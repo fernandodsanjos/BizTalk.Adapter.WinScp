@@ -46,7 +46,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
             if (this.controlledTermination.TerminateCalled)
                 return;
 
-            string tempDirectory = Properties.TemporaryFolder.HasValue() ? Properties.TemporaryFolder : Path.GetTempPath();
+            string rootTempDirectory = Properties.TemporaryFolder.HasValue() ? Properties.TemporaryFolder :Path.Combine(Path.GetTempPath(),Guid.NewGuid().ToString());
+            
             List<RemoteFileInfo> files = null;
 
             int currentFile = 0;
@@ -58,6 +59,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
                 foreach (var folder in subFolders)
                 {
+                    string tempDirectory = rootTempDirectory;
+
                     if (this.controlledTermination.TerminateCalled)
                         break;
 
@@ -120,8 +123,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
             }
             finally
             {
-                if (Properties.TemporaryFolder.IsEmpty())
-                    Directory.Delete(tempDirectory,true);
+                if (Properties.TemporaryFolder.IsEmpty() && Directory.Exists(rootTempDirectory))
+                    Directory.Delete(rootTempDirectory, true);
 
                 connection?.CloseSession();
 
@@ -399,7 +402,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
             string transportType,
             string propertyNamespace, ControlledTermination control)
         {
-
+          
             //config
             this.transportProxy = transportProxy;
             this.transportType = transportType;
@@ -407,10 +410,14 @@ namespace BizTalk.Adapter.WinScp.Runtime
             this.controlledTermination = control;
             this.messageFactory = this.transportProxy.GetMessageFactory();
 
-            var handler = ConfigProperties.ExtractConfigDom(handlerPropertyBag);
-
             Properties = new WinScpReceiverProperties();
-            Properties.LoadHandler(handler);
+
+            if(HasAdapterConfig(handlerPropertyBag))
+            {
+                XmlDocument handler = ConfigProperties.ExtractConfigDom(handlerPropertyBag);
+                Properties.LoadHandler(handler);
+            }
+
             Properties.LoadConfig(ConfigProperties.ExtractConfigDom(config));
 
 
@@ -421,6 +428,19 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
         }
 
+        private  bool HasAdapterConfig(IPropertyBag pConfig)
+        {
+            if (pConfig == null)
+                return false;
+
+            object ptrVar = (object)null;
+            pConfig.Read("AdapterConfig", out ptrVar, 0);
+
+            if (ptrVar == null)
+                return false;
+
+            return true;
+        }
         private void StopTimer()
         {
             lock (lockobject)

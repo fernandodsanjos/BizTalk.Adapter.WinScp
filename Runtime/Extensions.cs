@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+using Microsoft.BizTalk.Adapter.Common;
+using Microsoft.BizTalk.Component.Interop;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +13,7 @@ namespace BizTalk.Adapter.WinScp.VSExtensions
     public static class Extensions
     {
        
+      
 
         public static bool HasValue(this string value,string defaultValue = null)
         {
