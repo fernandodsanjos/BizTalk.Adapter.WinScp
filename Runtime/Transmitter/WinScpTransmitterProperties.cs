@@ -42,7 +42,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
         this.ConnectionReuseTime = ConfigProperties.IfExistsExtractUInt(configDOM, "/Config/maxConnectionReuseTime", 120);
         this.TemporaryFileExtension = ConfigProperties.IfExistsExtract(configDOM, "/Config/temporaryFileExtension", String.Empty);
   
-        }
+    }
 
    
   }
