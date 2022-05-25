@@ -84,12 +84,22 @@ namespace BizTalk.Adapter.WinScp.Runtime
                 string temporaryPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
                 Directory.CreateDirectory(temporaryPath);
 
+                string remoteFilepath = Properties.RemotePath;
+
                 if (IsDynamic(message.Context))
                 {
                     ParseOutboundTransportLocation(message.Context);
+
+                    if (connection.OpenSession().FileExists(Properties.RemotePath) == false)
+                    {
+                        connection.OpenSession().CreateDirectory(Properties.RemotePath);
+                    }
+
+                    remoteFilepath = FtpUtil.RemoteFolderPath(Properties.RemotePath);
+
                 }
 
-                string remoteFilepath = Properties.RemotePath;
+                
 
                 try
                 {
@@ -106,7 +116,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
                     if (Properties.TemporaryFileExtension.HasValue())
                     {
                         remoteFilepath = FtpUtil.UpdateExtension(remoteFilepath, Properties.TemporaryFileExtension);
-                    }
+                    }  
 
                     connection.OpenSession().PutFiles(temporaryFilename, remoteFilepath, true, connection.GetTransferOptions()).Check();
 

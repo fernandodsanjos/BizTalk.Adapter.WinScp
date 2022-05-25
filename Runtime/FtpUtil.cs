@@ -9,6 +9,12 @@ namespace BizTalk.Adapter.WinScp.Runtime
 {
     public class FtpUtil
     {
+        public static string RemoteFolderPath(string folder)
+        {
+            folder = folder.Trim('/');
+
+            return $"/{folder}".Replace("//", "/");
+        }
         public static string RemotePath(string folder,string filename)
         {
             folder = folder.Trim('/');
