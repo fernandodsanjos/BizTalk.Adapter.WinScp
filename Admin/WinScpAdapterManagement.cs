@@ -145,7 +145,7 @@ namespace BizTalk.Adapter.WinScp.Admin
                 sessionOptions.PortNumber = int.Parse(port.InnerText);
             }
 
-            StringBuilder urlBuilder = new StringBuilder($@"{sessionOptions.Protocol.ToString().ToLower()}://");
+            StringBuilder urlBuilder = new StringBuilder();
 
             if (sessionOptions.UserName.HasValue())
             {
@@ -177,6 +177,8 @@ namespace BizTalk.Adapter.WinScp.Admin
             urlBuilder.Append($@"/{fileMaskOrName}");
 
             string uri = urlBuilder.ToString().Replace("//","/");
+
+            uri = $@"{sessionOptions.Protocol.ToString().ToLower()}://{uri}";
 
             XmlNode newChild = configDOM.SelectSingleNode("Config/uri");
 
