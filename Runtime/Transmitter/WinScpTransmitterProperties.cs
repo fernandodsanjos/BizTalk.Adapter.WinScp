@@ -15,6 +15,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
     public string TargetFileName { get; set; }
 
+    public bool ResumeSupport { get; set; }
+        
     public string TemporaryFileExtension { get; set; }
         /// <summary>
         /// Connection reuse time in seconds
@@ -41,8 +43,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
         this.TargetFileName = ConfigProperties.IfExistsExtract(configDOM, "/Config/targetFileName", this.TargetFileName);
         this.ConnectionReuseTime = ConfigProperties.IfExistsExtractUInt(configDOM, "/Config/maxConnectionReuseTime", 120);
         this.TemporaryFileExtension = ConfigProperties.IfExistsExtract(configDOM, "/Config/temporaryFileExtension", String.Empty);
-  
-    }
+        this.ResumeSupport =  ConfigProperties.IfExistsExtractBool(configDOM, "/Config/resumeSupport", true);
+        }
 
    
   }

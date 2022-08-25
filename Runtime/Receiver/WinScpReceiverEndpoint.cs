@@ -66,6 +66,9 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
                     var remotePath = folder.HasValue() ? FtpUtil.RemotePath(Properties.RemotePath, folder): Properties.RemotePath;
 
+                    if (remotePath.StartsWith("/") == false)
+                        remotePath = "/";
+
                     files =
                      connection.OpenSession().EnumerateRemoteFiles(
                          remotePath, Properties.FileMask, EnumerationOptions.None)

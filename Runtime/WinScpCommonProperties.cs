@@ -17,10 +17,10 @@ namespace BizTalk.Adapter.WinScp.Runtime
         public enum ProxyMethod
         {
             None = 0,
-            SOCKS4 = 1,
-            SOCKS5 = 2,
-            HTTP = 3,
-            Telnet = 4
+            SOCKS4 = 1,//1080
+            SOCKS5 = 2,//1080
+            HTTP = 3,//80
+            Telnet = 4//80
         }
         //WebDAV and S3, not implemented/tested
 

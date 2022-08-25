@@ -116,9 +116,13 @@ namespace BizTalk.Adapter.WinScp.Runtime
                     if (Properties.TemporaryFileExtension.HasValue())
                     {
                         remoteFilepath = FtpUtil.UpdateExtension(remoteFilepath, Properties.TemporaryFileExtension);
-                    }  
+                    }
 
-                    connection.OpenSession().PutFiles(temporaryFilename, remoteFilepath, true, connection.GetTransferOptions()).Check();
+                    TransferOptions options = connection.GetTransferOptions();
+
+                    options.ResumeSupport.State = Properties.ResumeSupport ? TransferResumeSupportState.Default: TransferResumeSupportState.Off;
+
+                    connection.OpenSession().PutFiles(temporaryFilename, remoteFilepath, true, options).Check();
 
 
                     if (Properties.TemporaryFileExtension.HasValue())
