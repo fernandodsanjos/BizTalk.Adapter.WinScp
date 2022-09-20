@@ -67,7 +67,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
                     var remotePath = folder.HasValue() ? FtpUtil.RemotePath(Properties.RemotePath, folder): Properties.RemotePath;
 
                     if (remotePath.StartsWith("/") == false)
-                        remotePath = "/";
+                        remotePath = "/" + remotePath;
 
                     files =
                      connection.OpenSession().EnumerateRemoteFiles(
@@ -486,9 +486,6 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
         public override void Dispose()
         {
-
-           this.controlledTermination.Terminate();
-
 
             try
             {
