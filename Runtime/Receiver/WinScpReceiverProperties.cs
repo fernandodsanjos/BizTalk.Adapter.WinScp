@@ -24,6 +24,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
         public uint MaxFileSize { get; set; } = 100;
 
+        public uint MinFileSize { get; set; } = 0;
+
         public uint MaximumNumberOfFiles { get; set; }
 
         public string SubFolders { get; set; }
@@ -56,6 +58,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
             this.DeleteAfterDownload = ConfigProperties.IfExistsExtractBool(configDOM, "/Config/deleteAfterDownload", true);
 
+            this.MinFileSize = ConfigProperties.IfExistsExtractUInt(configDOM, "/Config/minFileSize", 0);
+            
         }
 
 

@@ -61,8 +61,9 @@ namespace BizTalk.Adapter.WinScp.Runtime
                     return;
                 }
 
+                uint reuseTime = ((WinScpTransmitterProperties)Properties).ConnectionReuseTime;
 
-                if (LastUsed.AddSeconds(((WinScpTransmitterProperties)Properties).ConnectionReuseTime) < DateTime.Now)
+                if (reuseTime == 0 || LastUsed.AddSeconds(reuseTime) < DateTime.Now)
                 {
                     CloseSession();
                 }

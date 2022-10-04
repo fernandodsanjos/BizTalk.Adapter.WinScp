@@ -87,6 +87,9 @@ namespace BizTalk.Adapter.WinScp.Runtime
                         if (file.Length == 0)
                             continue;
 
+                        if (false == CheckMinFileSize(file))
+                            continue;
+
                         if (false == CheckMaxFileSize(file))
                             continue;
 
@@ -120,8 +123,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
             }
             catch (Exception ex)
             {
-                EventLog.WriteEntry("BizTalk Server", $"Could not retrieve file(s), Excception {ex.Message}", EventLogEntryType.Warning);
-                errorCount++;
+                //EventLog.WriteEntry("BizTalk Server", $"Could not retrieve file(s), Excception {ex.Message}", EventLogEntryType.Warning);
                 throw ex;
             }
             finally
@@ -171,7 +173,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
             }
             catch (Exception ex)
             {
-                EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - DonwloadAndSubmit failed {ex.Message}", EventLogEntryType.Error);
+                EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - DonwloadAndSubmit failed {ex.Message}", EventLogEntryType.Warning);
                 throw ex;
             }
            
@@ -213,7 +215,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
             catch (Exception ex)
             {
 
-                EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - Could not remove remote file {ex.Message}", EventLogEntryType.Error);
+                EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - Could not remove remote file {ex.Message}", EventLogEntryType.Warning);
             }
   
 
@@ -257,14 +259,16 @@ namespace BizTalk.Adapter.WinScp.Runtime
            
 
         }
+       
 
-           
-           
-
+        private bool CheckMinFileSize(RemoteFileInfo item)
+        {
+            long fileSizeBytes = item.Length;
+            return (fileSizeBytes >= this.Properties.MinFileSize);
+          
+        }
 
         
-
-       
         private bool CheckMaxFileSize(RemoteFileInfo item)
         {
             long fileSizeBytes = item.Length;
@@ -326,12 +330,12 @@ namespace BizTalk.Adapter.WinScp.Runtime
                 }
                 catch (COMException ex)
                 {
-                    EventLog.WriteEntry("BizTalk Server", $"WinScp ControlledEndpointTask - e.ErrorCode = {ex.ErrorCode}", EventLogEntryType.Error);
+                    EventLog.WriteEntry("BizTalk Server", $"WinScp ControlledEndpointTask - e.ErrorCode = {ex.ErrorCode}", EventLogEntryType.Warning);
                     
                 }
                 catch (Exception ex)
                 {
-                    EventLog.WriteEntry("BizTalk Server", $"WinScp ControlledEndpointTask - e.Message = {ex.Message}", EventLogEntryType.Error);
+                    EventLog.WriteEntry("BizTalk Server", $"WinScp ControlledEndpointTask - e.Message = {ex.Message}", EventLogEntryType.Warning);
                   
                 }
                 finally
@@ -362,8 +366,6 @@ namespace BizTalk.Adapter.WinScp.Runtime
             }
             catch (Exception e)
             {
-                //WinScp - EndpointTask Failed Undantag från HRESULT: 0xC0C0163C
-                EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - EndpointTask Failed {e.Message}", EventLogEntryType.Error);
                 transportProxy.SetErrorInfo(e);
                 //Track number of failures
                 errorCount++;
