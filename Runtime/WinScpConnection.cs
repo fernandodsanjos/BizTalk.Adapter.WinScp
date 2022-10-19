@@ -34,10 +34,13 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
             if (properties is WinScpTransmitterProperties)
             {
-                this.timer = new System.Timers.Timer(((WinScpTransmitterProperties)Properties).ConnectionReuseTime * 1000);
-                this.timer.AutoReset = true;
-                this.timer.Elapsed += new ElapsedEventHandler(this.Release);
-                this.timer.Enabled = false;
+                if (((WinScpTransmitterProperties)Properties).ConnectionReuseTime > 0)
+                { 
+                    this.timer = new System.Timers.Timer(((WinScpTransmitterProperties)Properties).ConnectionReuseTime * 1000);
+                    this.timer.AutoReset = true;
+                    this.timer.Elapsed += new ElapsedEventHandler(this.Release);
+                    this.timer.Enabled = false;
+                }
             }
         }
 
@@ -83,7 +86,9 @@ namespace BizTalk.Adapter.WinScp.Runtime
             {
                 LastUsed = DateTime.Now;
                 Busy = false;
-                timer.Start();
+
+                if(timer !=  null)
+                    timer.Start();
             }
         }
 
