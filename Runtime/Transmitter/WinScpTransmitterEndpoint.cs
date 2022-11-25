@@ -17,8 +17,10 @@ using Microsoft.XLANGs.BaseTypes;
 
 namespace BizTalk.Adapter.WinScp.Runtime
 {
+    
     internal class WinScpTransmitterEndpoint : AsyncTransmitterEndpoint
     {
+
         private XmlQName CtxIsDynamic = new BTS.IsDynamicSend().QName;
         private XmlQName CtxTransportLocation = new BTS.OutboundTransportLocation().QName;
 
@@ -206,7 +208,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
             int outputLen = 260;
             StringBuilder realFilename = new StringBuilder(outputLen);
             bool hasWildcard = false;
-            NativeMethods.BuildFilename(message, pattern, realFilename, ref hasWildcard, ref outputLen);
+            BuildFilename(message, pattern, realFilename, ref hasWildcard, ref outputLen);
             return realFilename.ToString();
         }
 
