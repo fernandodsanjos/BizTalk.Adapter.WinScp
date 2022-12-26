@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using WinSCP;
+using BizTalk.Adapter.WinScp.VSExtensions;
 
 namespace BizTalk.Adapter.WinScp.Runtime
 {
@@ -109,6 +110,15 @@ namespace BizTalk.Adapter.WinScp.Runtime
         public string RemotePath { get; set; }
 
         public string SessionLogPath { get; set; }
+
+        public bool LogError
+        {
+            get
+            {
+                return SessionLogPath.HasValue();
+            }
+        }
+
 
         public string DebugLogPath { get; set; }
 

@@ -9,6 +9,7 @@ using WinSCP;
 using BizTalk.Adapter.WinScp.VSExtensions;
 using System.Timers;
 using Microsoft.BizTalk.Adapter.Common;
+using System.Diagnostics;
 
 namespace BizTalk.Adapter.WinScp.Runtime
 {
@@ -49,30 +50,43 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
             lock (lockObject)
             {
-                this.timer.Close();
-
-                if (Busy)
-                {
-                    this.timer.Start();
+                if (this.timer == null)
                     return;
-                }
 
-
-                if (SessionOpened() == false)
+                try
                 {
-                    this.timer.Start();
-                    return;
+                    this.timer.Close();
+
+                    if (Busy)
+                    {
+                        this.timer.Start();
+                        return;
+                    }
+
+
+                    if (SessionOpened() == false)
+                    {
+                        this.timer.Start();
+                        return;
+                    }
+
+                    uint reuseTime = ((WinScpTransmitterProperties)Properties).ConnectionReuseTime;
+
+                    if (reuseTime == 0 || LastUsed.AddSeconds(reuseTime) < DateTime.Now)
+                    {
+                        CloseSession();
+                    }
+                    else
+                        this.timer.Start();
+
                 }
-
-                uint reuseTime = ((WinScpTransmitterProperties)Properties).ConnectionReuseTime;
-
-                if (reuseTime == 0 || LastUsed.AddSeconds(reuseTime) < DateTime.Now)
+                catch (Exception ex)
                 {
-                    CloseSession();
+                    if (this.Properties.LogError)
+                        EventLog.WriteEntry("BizTalk Server", $"WinScp Release - e.Message = {ex.Message}", EventLogEntryType.Warning);
                 }
-                else
-                    this.timer.Start();
 
+                
 
             }
         }
@@ -245,6 +259,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
                     timer = null;
                     session = null;
 
+                    GC.SuppressFinalize(this);
                 }
             }
 

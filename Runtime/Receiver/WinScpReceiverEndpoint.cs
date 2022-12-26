@@ -24,7 +24,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
         private string propertyNamespace;
         private ControlledTermination controlledTermination;
         private IBaseMessageFactory messageFactory;
-        
+        private bool disposed = false;
+
        static readonly object lockobject = new object();
 
         private WinScpConnection connection = null;
@@ -123,8 +124,10 @@ namespace BizTalk.Adapter.WinScp.Runtime
             }
             catch (Exception ex)
             {
-                //EventLog.WriteEntry("BizTalk Server", $"Could not retrieve file(s), Excception {ex.Message}", EventLogEntryType.Warning);
-                throw ex;
+               if(this.Properties.LogError)
+                    EventLog.WriteEntry("BizTalk Server", $"PickupFilesAndSubmit - Could not retrieve file(s), Excception {ex.Message}", EventLogEntryType.Warning);
+
+               throw ex;
             }
             finally
             {
@@ -146,7 +149,8 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
         private void DonwloadAndSubmit(RemoteFileInfo file,string localFilePath)
         {
-
+            if (this.controlledTermination.TerminateCalled)
+                return;
 
             try
             {
@@ -173,7 +177,9 @@ namespace BizTalk.Adapter.WinScp.Runtime
             }
             catch (Exception ex)
             {
-                EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - DonwloadAndSubmit failed {ex.Message}", EventLogEntryType.Warning);
+                if (this.Properties.LogError)
+                    EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - DonwloadAndSubmit failed {ex.Message}", EventLogEntryType.Warning);
+
                 throw ex;
             }
            
@@ -214,8 +220,7 @@ namespace BizTalk.Adapter.WinScp.Runtime
             }
             catch (Exception ex)
             {
-
-                EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - Could not remove remote file {ex.Message}", EventLogEntryType.Warning);
+                    EventLog.WriteEntry("BizTalk Server", $"WinScp Adapter - Could not remove remote file {remoteFilePath} \n {ex.Message}", EventLogEntryType.Error);
             }
   
 
@@ -313,6 +318,13 @@ namespace BizTalk.Adapter.WinScp.Runtime
 
         public void ControlledEndpointTask(object sender, ElapsedEventArgs e)
         {
+            if (this.Disposed())
+            {
+                this.StopTimer();
+                return;
+            }
+                
+
             ControlledEndpointTask();
         }
         public void ControlledEndpointTask()
@@ -454,7 +466,16 @@ namespace BizTalk.Adapter.WinScp.Runtime
                 if (timer == null)
                     return;
 
-                this.timer.Stop();
+                try
+                {
+                    this.timer.Stop();
+                }
+                catch (Exception ex)
+                {
+                    if (this.Properties.LogError)
+                        EventLog.WriteEntry("BizTalk Server", $"WinScp StopTimer - e.Message = {ex.Message}", EventLogEntryType.Warning);
+                }
+               
             }
         }
 
@@ -469,7 +490,16 @@ namespace BizTalk.Adapter.WinScp.Runtime
                     this.timer.Elapsed += new ElapsedEventHandler(this.ControlledEndpointTask);
                 }
 
-                this.timer.Start();
+                try
+                {
+                    this.timer.Start();
+                }
+                catch (Exception ex)
+                {
+                    if (this.Properties.LogError)
+                        EventLog.WriteEntry("BizTalk Server", $"WinScp StartTimer - e.Message = {ex.Message}", EventLogEntryType.Warning);
+                }
+                
             }
         }
         public override void Update(
@@ -486,29 +516,40 @@ namespace BizTalk.Adapter.WinScp.Runtime
             StartTimer();
         }
 
+        private bool Disposed()
+        {
+            lock (lockobject)
+            {
+                return disposed;
+            }
+        }
         public override void Dispose()
         {
-
-            try
+            lock (lockobject)
             {
-                if (timer != null)
-                    timer.Dispose();
+                try
+                {
 
-                if (connection != null)
-                    connection.Dispose();
+                    if (timer != null)
+                        timer.Dispose();
+
+                    if (connection != null)
+                        connection.Dispose();
+                }
+                finally
+                {
+                    //  disposed = true;
+                    timer = null;
+                    connection = null;
+
+                    base.Dispose();
+
+                    disposed = true;
+
+                    GC.SuppressFinalize(this);
+                }
+
             }
-            finally
-            {
-                //  disposed = true;
-                timer = null;
-                connection = null;
-
-                base.Dispose();
-
-                // GC.SuppressFinalize(this);
-            }
-           
-
           
 
         }
