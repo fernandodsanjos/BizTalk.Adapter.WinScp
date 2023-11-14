@@ -73,7 +73,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WinSCPnet">
-      <HintPath>C:\Program Files (x86)\Microsoft BizTalk Server\WinSCPnet.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Common Files\Microsoft BizTalk\BizTalk.Adapter.WinScp\WinSCPnet.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
